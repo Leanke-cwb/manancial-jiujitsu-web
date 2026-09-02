@@ -1072,3 +1072,437 @@ input {
     width: 100%;
   }
 }
+.student-photo-editor {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.student-photo-preview {
+  width: 135px;
+  height: 135px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #f1f5f9;
+  background: #e2e8f0;
+}
+
+.student-photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.photo-input-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.photo-input-area span {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.photo-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.photo-remove-button {
+  border: none;
+  background: transparent;
+  color: #be123c;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* LINK DO ALUNO */
+
+.student-name-link {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: #0f172a;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
+.student-name-link:hover {
+  text-decoration: underline;
+}
+
+/* PERFIL */
+
+.profile-top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.profile-top-actions .back-button {
+  margin-bottom: 0;
+}
+
+.student-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 28px;
+  background: white;
+  border: 1px solid #e5eaf0;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 4px solid #e2e8f0;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-main-info {
+  flex: 1;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 13px;
+}
+
+.profile-name-row h1 {
+  color: #0f172a;
+  font-size: 28px;
+}
+
+.profile-belt {
+  margin-top: 8px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 17px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.profile-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* RESUMO */
+
+.profile-summary-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.profile-summary-card {
+  min-height: 115px;
+  background: white;
+  border: 1px solid #e5eaf0;
+  border-radius: 12px;
+  padding: 19px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-summary-card > svg {
+  color: #475569;
+  margin-bottom: 13px;
+}
+
+.profile-summary-card span {
+  color: #64748b;
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+
+.profile-summary-card strong {
+  color: #0f172a;
+  font-size: 16px;
+}
+
+/* ABAS */
+
+.profile-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+  padding: 5px;
+  background: white;
+  border: 1px solid #e5eaf0;
+  border-radius: 11px;
+  overflow-x: auto;
+}
+
+.profile-tabs button {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.profile-tabs button:hover {
+  background: #f8fafc;
+}
+
+.profile-tabs button.active {
+  background: #0f172a;
+  color: white;
+}
+
+/* CONTEÚDO */
+
+.profile-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.detail-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detail-grid span {
+  color: #94a3b8;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.detail-grid strong {
+  color: #334155;
+  font-size: 14px;
+}
+
+.address-display {
+  display: flex;
+  gap: 13px;
+  color: #475569;
+}
+
+.address-display > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.address-display strong {
+  color: #334155;
+}
+
+.address-display span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.profile-observations {
+  color: #475569;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.empty-inline {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* FINANCEIRO */
+
+.current-plan-box {
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.current-plan-box span {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.current-plan-box strong {
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.current-plan-box small {
+  color: #64748b;
+}
+
+.finance-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+.finance-pago {
+  color: #047857;
+  background: #ecfdf5;
+}
+
+.finance-pendente {
+  color: #b45309;
+  background: #fffbeb;
+}
+
+.finance-cancelado {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+/* GRADUAÇÃO */
+
+.graduation-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.graduation-item {
+  position: relative;
+  display: flex;
+  gap: 18px;
+  padding: 5px 0 25px 7px;
+  border-left: 2px solid #e2e8f0;
+}
+
+.graduation-marker {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: -7px;
+  top: 7px;
+  border-radius: 50%;
+  background: #0f172a;
+  border: 2px solid white;
+}
+
+.graduation-item > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 7px;
+}
+
+.graduation-item strong {
+  color: #0f172a;
+}
+
+.graduation-item span,
+.graduation-item small {
+  color: #64748b;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 1100px) {
+  .profile-summary-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .student-profile-header {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .student-photo-editor {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-top-actions {
+    gap: 12px;
+  }
+
+  .student-profile-header {
+    flex-direction: column;
+  }
+
+  .profile-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-tabs {
+    width: 100%;
+  }
+}

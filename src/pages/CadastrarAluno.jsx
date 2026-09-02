@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   ArrowLeft,
@@ -10,6 +11,12 @@ import {
 } from "lucide-react";
 
 import { supabase } from "../services/supabaseClient";
+
+import {
+  removerFotoAluno,
+  uploadFotoAluno,
+  validarFotoAluno,
+} from "../services/fotoAluno";
 
 const FORM_INICIAL = {
   nome: "",
@@ -51,11 +58,47 @@ export default function CadastrarAluno() {
   const [salvando, setSalvando] =
     useState(false);
 
+  const [foto, setFoto] =
+    useState(null);
+
+  const [fotoPreview, setFotoPreview] =
+    useState(null);
+
+  useEffect(() => {
+    if (!foto) {
+      setFotoPreview(null);
+      return;
+    }
+
+    const url = URL.createObjectURL(foto);
+
+    setFotoPreview(url);
+
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [foto]);
+
   const alterar = (campo, valor) => {
     setForm((anterior) => ({
       ...anterior,
       [campo]: valor,
     }));
+  };
+
+  const selecionarFoto = (event) => {
+    const arquivo =
+      event.target.files?.[0];
+
+    if (!arquivo) return;
+
+    try {
+      validarFotoAluno(arquivo);
+      setFoto(arquivo);
+    } catch (error) {
+      alert(error.message);
+      event.target.value = "";
+    }
   };
 
   const salvar = async (e) => {
@@ -66,10 +109,20 @@ export default function CadastrarAluno() {
       return;
     }
 
+    const alunoId = crypto.randomUUID();
+
+    let fotoPath = null;
+    let responsavelId = null;
+
     try {
       setSalvando(true);
 
-      let responsavelId = null;
+      if (foto) {
+        fotoPath = await uploadFotoAluno(
+          alunoId,
+          foto
+        );
+      }
 
       if (form.responsavel_nome.trim()) {
         const {
@@ -107,13 +160,13 @@ export default function CadastrarAluno() {
         responsavelId = responsavel.id;
       }
 
-      const {
-        error: erroAluno,
-      } = await supabase
+      const { error: erroAluno } = await supabase
         .from("alunos")
         .insert({
-          nome: form.nome.trim(),
+          id: alunoId,
+          foto_url: fotoPath,
 
+          nome: form.nome.trim(),
           cpf: form.cpf.trim() || null,
 
           data_nascimento:
@@ -135,8 +188,7 @@ export default function CadastrarAluno() {
             form.numero.trim() || null,
 
           complemento:
-            form.complemento.trim() ||
-            null,
+            form.complemento.trim() || null,
 
           bairro:
             form.bairro.trim() || null,
@@ -151,14 +203,11 @@ export default function CadastrarAluno() {
             form.data_matricula || null,
 
           status: form.status,
-
           faixa: form.faixa,
-
           grau: Number(form.grau),
 
           observacoes:
-            form.observacoes.trim() ||
-            null,
+            form.observacoes.trim() || null,
 
           responsavel_id:
             responsavelId,
@@ -169,9 +218,19 @@ export default function CadastrarAluno() {
       }
 
       alert("Aluno cadastrado com sucesso!");
-
       navigate("/alunos");
     } catch (error) {
+      if (fotoPath) {
+        try {
+          await removerFotoAluno(fotoPath);
+        } catch (erroRemocao) {
+          console.error(
+            "Erro ao limpar foto:",
+            erroRemocao
+          );
+        }
+      }
+
       console.error(
         "Erro ao cadastrar aluno:",
         error
@@ -216,10 +275,63 @@ export default function CadastrarAluno() {
       >
         <section className="form-card">
           <div className="form-section-title">
-            <h2>Dados pessoais</h2>
+            <h2>Foto do aluno</h2>
+
             <p>
-              Informações principais do aluno.
+              Utilize uma foto de rosto para
+              identificação.
             </p>
+          </div>
+
+          <div className="student-photo-editor">
+            <div className="student-photo-preview">
+              {fotoPreview ? (
+                <img
+                  src={fotoPreview}
+                  alt="Foto do aluno"
+                />
+              ) : (
+                <div className="student-photo-placeholder">
+                  FOTO
+                </div>
+              )}
+            </div>
+
+            <div className="photo-input-area">
+              <label className="btn-secondary photo-button">
+                Selecionar foto
+
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={selecionarFoto}
+                  hidden
+                />
+              </label>
+
+              <span>
+                JPG, PNG ou WebP • máximo 5 MB
+              </span>
+
+              {foto && (
+                <button
+                  type="button"
+                  className="photo-remove-button"
+                  onClick={() =>
+                    setFoto(null)
+                  }
+                >
+                  Remover foto selecionada
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="form-card">
+          <div className="form-section-title">
+            <h2>Dados pessoais</h2>
+            <p>Informações principais do aluno.</p>
           </div>
 
           <div className="form-grid">
@@ -229,10 +341,7 @@ export default function CadastrarAluno() {
               <input
                 value={form.nome}
                 onChange={(e) =>
-                  alterar(
-                    "nome",
-                    e.target.value
-                  )
+                  alterar("nome", e.target.value)
                 }
               />
             </div>
@@ -243,24 +352,17 @@ export default function CadastrarAluno() {
               <input
                 value={form.cpf}
                 onChange={(e) =>
-                  alterar(
-                    "cpf",
-                    e.target.value
-                  )
+                  alterar("cpf", e.target.value)
                 }
               />
             </div>
 
             <div className="form-field">
-              <label>
-                Data de nascimento
-              </label>
+              <label>Data de nascimento</label>
 
               <input
                 type="date"
-                value={
-                  form.data_nascimento
-                }
+                value={form.data_nascimento}
                 onChange={(e) =>
                   alterar(
                     "data_nascimento",
@@ -291,10 +393,7 @@ export default function CadastrarAluno() {
                 type="email"
                 value={form.email}
                 onChange={(e) =>
-                  alterar(
-                    "email",
-                    e.target.value
-                  )
+                  alterar("email", e.target.value)
                 }
               />
             </div>
@@ -313,10 +412,7 @@ export default function CadastrarAluno() {
               <input
                 value={form.cep}
                 onChange={(e) =>
-                  alterar(
-                    "cep",
-                    e.target.value
-                  )
+                  alterar("cep", e.target.value)
                 }
               />
             </div>
@@ -341,10 +437,7 @@ export default function CadastrarAluno() {
               <input
                 value={form.numero}
                 onChange={(e) =>
-                  alterar(
-                    "numero",
-                    e.target.value
-                  )
+                  alterar("numero", e.target.value)
                 }
               />
             </div>
@@ -353,9 +446,7 @@ export default function CadastrarAluno() {
               <label>Complemento</label>
 
               <input
-                value={
-                  form.complemento
-                }
+                value={form.complemento}
                 onChange={(e) =>
                   alterar(
                     "complemento",
@@ -371,10 +462,7 @@ export default function CadastrarAluno() {
               <input
                 value={form.bairro}
                 onChange={(e) =>
-                  alterar(
-                    "bairro",
-                    e.target.value
-                  )
+                  alterar("bairro", e.target.value)
                 }
               />
             </div>
@@ -385,10 +473,7 @@ export default function CadastrarAluno() {
               <input
                 value={form.cidade}
                 onChange={(e) =>
-                  alterar(
-                    "cidade",
-                    e.target.value
-                  )
+                  alterar("cidade", e.target.value)
                 }
               />
             </div>
@@ -422,15 +507,11 @@ export default function CadastrarAluno() {
 
           <div className="form-grid">
             <div className="form-field">
-              <label>
-                Data da matrícula
-              </label>
+              <label>Data da matrícula</label>
 
               <input
                 type="date"
-                value={
-                  form.data_matricula
-                }
+                value={form.data_matricula}
                 onChange={(e) =>
                   alterar(
                     "data_matricula",
@@ -452,21 +533,10 @@ export default function CadastrarAluno() {
                   )
                 }
               >
-                <option value="ativo">
-                  Ativo
-                </option>
-
-                <option value="inativo">
-                  Inativo
-                </option>
-
-                <option value="trancado">
-                  Trancado
-                </option>
-
-                <option value="visitante">
-                  Visitante
-                </option>
+                <option value="ativo">Ativo</option>
+                <option value="inativo">Inativo</option>
+                <option value="trancado">Trancado</option>
+                <option value="visitante">Visitante</option>
               </select>
             </div>
 
@@ -509,14 +579,9 @@ export default function CadastrarAluno() {
                 }
               >
                 {Array.from(
-                  {
-                    length: 11,
-                  },
+                  { length: 11 },
                   (_, i) => (
-                    <option
-                      key={i}
-                      value={i}
-                    >
+                    <option key={i} value={i}>
                       {i}
                     </option>
                   )
@@ -532,21 +597,16 @@ export default function CadastrarAluno() {
 
             <p>
               Preencha quando necessário,
-              principalmente para alunos
-              menores.
+              principalmente para alunos menores.
             </p>
           </div>
 
           <div className="form-grid">
             <div className="form-field span-2">
-              <label>
-                Nome do responsável
-              </label>
+              <label>Nome do responsável</label>
 
               <input
-                value={
-                  form.responsavel_nome
-                }
+                value={form.responsavel_nome}
                 onChange={(e) =>
                   alterar(
                     "responsavel_nome",
@@ -560,9 +620,7 @@ export default function CadastrarAluno() {
               <label>CPF</label>
 
               <input
-                value={
-                  form.responsavel_cpf
-                }
+                value={form.responsavel_cpf}
                 onChange={(e) =>
                   alterar(
                     "responsavel_cpf",
@@ -577,9 +635,7 @@ export default function CadastrarAluno() {
 
               <input
                 placeholder="Pai, mãe..."
-                value={
-                  form.responsavel_parentesco
-                }
+                value={form.responsavel_parentesco}
                 onChange={(e) =>
                   alterar(
                     "responsavel_parentesco",
@@ -593,9 +649,7 @@ export default function CadastrarAluno() {
               <label>Telefone</label>
 
               <input
-                value={
-                  form.responsavel_telefone
-                }
+                value={form.responsavel_telefone}
                 onChange={(e) =>
                   alterar(
                     "responsavel_telefone",
@@ -610,9 +664,7 @@ export default function CadastrarAluno() {
 
               <input
                 type="email"
-                value={
-                  form.responsavel_email
-                }
+                value={form.responsavel_email}
                 onChange={(e) =>
                   alterar(
                     "responsavel_email",

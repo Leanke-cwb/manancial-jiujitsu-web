@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import Alunos from "./pages/Alunos";
 import CadastrarAluno from "./pages/CadastrarAluno";
 import EditarAluno from "./pages/EditarAluno";
+import PerfilAluno from "./pages/PerfilAluno";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
@@ -70,6 +71,11 @@ export default function App() {
         <Route
           path="/alunos/:id/editar"
           element={<EditarAluno />}
+        />
+
+        <Route
+          path="/alunos/:id"
+          element={<PerfilAluno />}
         />
 
         <Route

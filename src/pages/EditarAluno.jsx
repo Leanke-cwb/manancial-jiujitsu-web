@@ -15,9 +15,15 @@ import {
 
 import { supabase } from "../services/supabaseClient";
 
+import {
+  obterUrlFotoAluno,
+  removerFotoAluno,
+  uploadFotoAluno,
+  validarFotoAluno,
+} from "../services/fotoAluno";
+
 export default function EditarAluno() {
   const { id } = useParams();
-
   const navigate = useNavigate();
 
   const [loading, setLoading] =
@@ -27,6 +33,18 @@ export default function EditarAluno() {
     useState(false);
 
   const [responsavelId, setResponsavelId] =
+    useState(null);
+
+  const [fotoAtualPath, setFotoAtualPath] =
+    useState(null);
+
+  const [fotoPreview, setFotoPreview] =
+    useState(null);
+
+  const [novaFoto, setNovaFoto] =
+    useState(null);
+
+  const [previewTemporario, setPreviewTemporario] =
     useState(null);
 
   const [form, setForm] = useState({
@@ -62,6 +80,14 @@ export default function EditarAluno() {
     carregarAluno();
   }, [id]);
 
+  useEffect(() => {
+    return () => {
+      if (previewTemporario) {
+        URL.revokeObjectURL(previewTemporario);
+      }
+    };
+  }, [previewTemporario]);
+
   const alterar = (campo, valor) => {
     setForm((anterior) => ({
       ...anterior,
@@ -89,44 +115,49 @@ export default function EditarAluno() {
         .eq("id", id)
         .single();
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
-      const responsavel =
-        data.responsaveis;
+      const responsavel = data.responsaveis;
 
       setResponsavelId(
         responsavel?.id || null
       );
 
+      setFotoAtualPath(
+        data.foto_url || null
+      );
+
+      if (data.foto_url) {
+        const url = await obterUrlFotoAluno(
+          data.foto_url
+        );
+
+        setFotoPreview(url);
+      } else {
+        setFotoPreview(null);
+      }
+
       setForm({
         nome: data.nome || "",
         cpf: data.cpf || "",
-
         data_nascimento:
           data.data_nascimento || "",
-
         telefone: data.telefone || "",
         email: data.email || "",
 
         cep: data.cep || "",
         endereco: data.endereco || "",
         numero: data.numero || "",
-
         complemento:
           data.complemento || "",
-
         bairro: data.bairro || "",
         cidade: data.cidade || "",
         estado: data.estado || "",
 
         data_matricula:
           data.data_matricula || "",
-
         status: data.status || "ativo",
         faixa: data.faixa || "Branca",
-
         grau:
           data.grau !== null
             ? data.grau
@@ -137,16 +168,12 @@ export default function EditarAluno() {
 
         responsavel_nome:
           responsavel?.nome || "",
-
         responsavel_cpf:
           responsavel?.cpf || "",
-
         responsavel_telefone:
           responsavel?.telefone || "",
-
         responsavel_email:
           responsavel?.email || "",
-
         responsavel_parentesco:
           responsavel?.parentesco || "",
       });
@@ -157,10 +184,34 @@ export default function EditarAluno() {
       );
 
       alert("Erro ao carregar aluno.");
-
       navigate("/alunos");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const selecionarFoto = (event) => {
+    const arquivo =
+      event.target.files?.[0];
+
+    if (!arquivo) return;
+
+    try {
+      validarFotoAluno(arquivo);
+
+      if (previewTemporario) {
+        URL.revokeObjectURL(previewTemporario);
+      }
+
+      const preview =
+        URL.createObjectURL(arquivo);
+
+      setNovaFoto(arquivo);
+      setPreviewTemporario(preview);
+      setFotoPreview(preview);
+    } catch (error) {
+      alert(error.message);
+      event.target.value = "";
     }
   };
 
@@ -171,6 +222,8 @@ export default function EditarAluno() {
       alert("Informe o nome do aluno.");
       return;
     }
+
+    let fotoNovaEnviada = null;
 
     try {
       setSalvando(true);
@@ -206,9 +259,7 @@ export default function EditarAluno() {
             .update(dadosResponsavel)
             .eq("id", responsavelId);
 
-          if (error) {
-            throw error;
-          }
+          if (error) throw error;
         } else {
           const {
             data,
@@ -219,21 +270,33 @@ export default function EditarAluno() {
             .select("id")
             .single();
 
-          if (error) {
-            throw error;
-          }
+          if (error) throw error;
 
           novoResponsavelId = data.id;
-
           setResponsavelId(data.id);
         }
+      }
+
+      let novoFotoPath =
+        fotoAtualPath;
+
+      if (novaFoto) {
+        fotoNovaEnviada =
+          await uploadFotoAluno(
+            id,
+            novaFoto
+          );
+
+        novoFotoPath =
+          fotoNovaEnviada;
       }
 
       const { error } = await supabase
         .from("alunos")
         .update({
-          nome: form.nome.trim(),
+          foto_url: novoFotoPath,
 
+          nome: form.nome.trim(),
           cpf: form.cpf.trim() || null,
 
           data_nascimento:
@@ -270,9 +333,7 @@ export default function EditarAluno() {
             form.data_matricula || null,
 
           status: form.status,
-
           faixa: form.faixa,
-
           grau: Number(form.grau),
 
           observacoes:
@@ -284,16 +345,41 @@ export default function EditarAluno() {
         })
         .eq("id", id);
 
-      if (error) {
-        throw error;
+      if (error) throw error;
+
+      if (
+        novaFoto &&
+        fotoAtualPath &&
+        fotoAtualPath !== novoFotoPath
+      ) {
+        try {
+          await removerFotoAluno(
+            fotoAtualPath
+          );
+        } catch (erroFoto) {
+          console.error(
+            "Foto antiga não removida:",
+            erroFoto
+          );
+        }
       }
 
-      alert(
-        "Aluno atualizado com sucesso!"
-      );
-
-      navigate("/alunos");
+      alert("Aluno atualizado com sucesso!");
+      navigate(`/alunos/${id}`);
     } catch (error) {
+      if (fotoNovaEnviada) {
+        try {
+          await removerFotoAluno(
+            fotoNovaEnviada
+          );
+        } catch (erroLimpeza) {
+          console.error(
+            "Erro ao limpar a nova foto:",
+            erroLimpeza
+          );
+        }
+      }
+
       console.error(
         "Erro ao atualizar aluno:",
         error
@@ -324,7 +410,7 @@ export default function EditarAluno() {
           <button
             className="back-button"
             onClick={() =>
-              navigate("/alunos")
+              navigate(`/alunos/${id}`)
             }
           >
             <ArrowLeft size={18} />
@@ -332,7 +418,6 @@ export default function EditarAluno() {
           </button>
 
           <h1>Editar aluno</h1>
-
           <p>{form.nome}</p>
         </div>
       </header>
@@ -343,48 +428,78 @@ export default function EditarAluno() {
       >
         <section className="form-card">
           <div className="form-section-title">
+            <h2>Foto do aluno</h2>
+
+            <p>
+              Foto utilizada para identificação
+              do aluno.
+            </p>
+          </div>
+
+          <div className="student-photo-editor">
+            <div className="student-photo-preview">
+              {fotoPreview ? (
+                <img
+                  src={fotoPreview}
+                  alt={form.nome}
+                />
+              ) : (
+                <div className="student-photo-placeholder">
+                  FOTO
+                </div>
+              )}
+            </div>
+
+            <div className="photo-input-area">
+              <label className="btn-secondary photo-button">
+                Trocar foto
+
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={selecionarFoto}
+                  hidden
+                />
+              </label>
+
+              <span>
+                JPG, PNG ou WebP • máximo 5 MB
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section className="form-card">
+          <div className="form-section-title">
             <h2>Dados pessoais</h2>
           </div>
 
           <div className="form-grid">
             <div className="form-field span-2">
               <label>Nome *</label>
-
               <input
                 value={form.nome}
                 onChange={(e) =>
-                  alterar(
-                    "nome",
-                    e.target.value
-                  )
+                  alterar("nome", e.target.value)
                 }
               />
             </div>
 
             <div className="form-field">
               <label>CPF</label>
-
               <input
                 value={form.cpf}
                 onChange={(e) =>
-                  alterar(
-                    "cpf",
-                    e.target.value
-                  )
+                  alterar("cpf", e.target.value)
                 }
               />
             </div>
 
             <div className="form-field">
-              <label>
-                Data de nascimento
-              </label>
-
+              <label>Data de nascimento</label>
               <input
                 type="date"
-                value={
-                  form.data_nascimento
-                }
+                value={form.data_nascimento}
                 onChange={(e) =>
                   alterar(
                     "data_nascimento",
@@ -396,7 +511,6 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>Telefone</label>
-
               <input
                 value={form.telefone}
                 onChange={(e) =>
@@ -410,15 +524,11 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>E-mail</label>
-
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) =>
-                  alterar(
-                    "email",
-                    e.target.value
-                  )
+                  alterar("email", e.target.value)
                 }
               />
             </div>
@@ -433,21 +543,16 @@ export default function EditarAluno() {
           <div className="form-grid">
             <div className="form-field">
               <label>CEP</label>
-
               <input
                 value={form.cep}
                 onChange={(e) =>
-                  alterar(
-                    "cep",
-                    e.target.value
-                  )
+                  alterar("cep", e.target.value)
                 }
               />
             </div>
 
             <div className="form-field span-2">
               <label>Endereço</label>
-
               <input
                 value={form.endereco}
                 onChange={(e) =>
@@ -461,25 +566,18 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>Número</label>
-
               <input
                 value={form.numero}
                 onChange={(e) =>
-                  alterar(
-                    "numero",
-                    e.target.value
-                  )
+                  alterar("numero", e.target.value)
                 }
               />
             </div>
 
             <div className="form-field">
               <label>Complemento</label>
-
               <input
-                value={
-                  form.complemento
-                }
+                value={form.complemento}
                 onChange={(e) =>
                   alterar(
                     "complemento",
@@ -491,35 +589,26 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>Bairro</label>
-
               <input
                 value={form.bairro}
                 onChange={(e) =>
-                  alterar(
-                    "bairro",
-                    e.target.value
-                  )
+                  alterar("bairro", e.target.value)
                 }
               />
             </div>
 
             <div className="form-field">
               <label>Cidade</label>
-
               <input
                 value={form.cidade}
                 onChange={(e) =>
-                  alterar(
-                    "cidade",
-                    e.target.value
-                  )
+                  alterar("cidade", e.target.value)
                 }
               />
             </div>
 
             <div className="form-field">
               <label>Estado</label>
-
               <input
                 maxLength={2}
                 value={form.estado}
@@ -541,15 +630,11 @@ export default function EditarAluno() {
 
           <div className="form-grid">
             <div className="form-field">
-              <label>
-                Data da matrícula
-              </label>
+              <label>Data da matrícula</label>
 
               <input
                 type="date"
-                value={
-                  form.data_matricula
-                }
+                value={form.data_matricula}
                 onChange={(e) =>
                   alterar(
                     "data_matricula",
@@ -571,21 +656,10 @@ export default function EditarAluno() {
                   )
                 }
               >
-                <option value="ativo">
-                  Ativo
-                </option>
-
-                <option value="inativo">
-                  Inativo
-                </option>
-
-                <option value="trancado">
-                  Trancado
-                </option>
-
-                <option value="visitante">
-                  Visitante
-                </option>
+                <option value="ativo">Ativo</option>
+                <option value="inativo">Inativo</option>
+                <option value="trancado">Trancado</option>
+                <option value="visitante">Visitante</option>
               </select>
             </div>
 
@@ -628,14 +702,9 @@ export default function EditarAluno() {
                 }
               >
                 {Array.from(
-                  {
-                    length: 11,
-                  },
+                  { length: 11 },
                   (_, i) => (
-                    <option
-                      key={i}
-                      value={i}
-                    >
+                    <option key={i} value={i}>
                       {i}
                     </option>
                   )
@@ -653,11 +722,8 @@ export default function EditarAluno() {
           <div className="form-grid">
             <div className="form-field span-2">
               <label>Nome</label>
-
               <input
-                value={
-                  form.responsavel_nome
-                }
+                value={form.responsavel_nome}
                 onChange={(e) =>
                   alterar(
                     "responsavel_nome",
@@ -669,11 +735,8 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>CPF</label>
-
               <input
-                value={
-                  form.responsavel_cpf
-                }
+                value={form.responsavel_cpf}
                 onChange={(e) =>
                   alterar(
                     "responsavel_cpf",
@@ -685,11 +748,8 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>Parentesco</label>
-
               <input
-                value={
-                  form.responsavel_parentesco
-                }
+                value={form.responsavel_parentesco}
                 onChange={(e) =>
                   alterar(
                     "responsavel_parentesco",
@@ -701,11 +761,8 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>Telefone</label>
-
               <input
-                value={
-                  form.responsavel_telefone
-                }
+                value={form.responsavel_telefone}
                 onChange={(e) =>
                   alterar(
                     "responsavel_telefone",
@@ -717,11 +774,9 @@ export default function EditarAluno() {
 
             <div className="form-field">
               <label>E-mail</label>
-
               <input
-                value={
-                  form.responsavel_email
-                }
+                type="email"
+                value={form.responsavel_email}
                 onChange={(e) =>
                   alterar(
                     "responsavel_email",
@@ -757,7 +812,7 @@ export default function EditarAluno() {
             type="button"
             className="btn-secondary"
             onClick={() =>
-              navigate("/alunos")
+              navigate(`/alunos/${id}`)
             }
           >
             Cancelar

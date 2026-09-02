@@ -23,7 +23,6 @@ export default function Alunos() {
   const [pesquisa, setPesquisa] = useState("");
   const [filtroStatus, setFiltroStatus] =
     useState("todos");
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -51,17 +50,11 @@ export default function Alunos() {
           ascending: true,
         });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       setAlunos(data || []);
     } catch (error) {
-      console.error(
-        "Erro ao carregar alunos:",
-        error
-      );
-
+      console.error("Erro ao carregar alunos:", error);
       alert("Erro ao carregar os alunos.");
     } finally {
       setLoading(false);
@@ -79,9 +72,7 @@ export default function Alunos() {
         ? `Deseja inativar ${aluno.nome}?`
         : `Deseja reativar ${aluno.nome}?`;
 
-    if (!window.confirm(mensagem)) {
-      return;
-    }
+    if (!window.confirm(mensagem)) return;
 
     try {
       const { error } = await supabase
@@ -91,9 +82,7 @@ export default function Alunos() {
         })
         .eq("id", aluno.id);
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       setAlunos((lista) =>
         lista.map((item) =>
@@ -106,21 +95,13 @@ export default function Alunos() {
         )
       );
     } catch (error) {
-      console.error(
-        "Erro ao alterar status:",
-        error
-      );
-
-      alert(
-        "Não foi possível alterar o status."
-      );
+      console.error("Erro ao alterar status:", error);
+      alert("Não foi possível alterar o status.");
     }
   };
 
   const alunosFiltrados = useMemo(() => {
-    const texto = pesquisa
-      .trim()
-      .toLowerCase();
+    const texto = pesquisa.trim().toLowerCase();
 
     return alunos.filter((aluno) => {
       const statusValido =
@@ -129,15 +110,9 @@ export default function Alunos() {
 
       const pesquisaValida =
         !texto ||
-        aluno.nome
-          ?.toLowerCase()
-          .includes(texto) ||
-        aluno.cpf
-          ?.toLowerCase()
-          .includes(texto) ||
-        aluno.telefone
-          ?.toLowerCase()
-          .includes(texto);
+        aluno.nome?.toLowerCase().includes(texto) ||
+        aluno.cpf?.toLowerCase().includes(texto) ||
+        aluno.telefone?.toLowerCase().includes(texto);
 
       return statusValido && pesquisaValida;
     });
@@ -148,7 +123,6 @@ export default function Alunos() {
       <header className="page-header">
         <div>
           <h1>Alunos</h1>
-
           <p>
             Cadastro e gerenciamento dos alunos
             da academia.
@@ -157,9 +131,7 @@ export default function Alunos() {
 
         <button
           className="btn-primary"
-          onClick={() =>
-            navigate("/alunos/novo")
-          }
+          onClick={() => navigate("/alunos/novo")}
         >
           <Plus size={18} />
           Novo aluno
@@ -188,25 +160,11 @@ export default function Alunos() {
               setFiltroStatus(e.target.value)
             }
           >
-            <option value="todos">
-              Todos
-            </option>
-
-            <option value="ativo">
-              Ativos
-            </option>
-
-            <option value="inativo">
-              Inativos
-            </option>
-
-            <option value="trancado">
-              Trancados
-            </option>
-
-            <option value="visitante">
-              Visitantes
-            </option>
+            <option value="todos">Todos</option>
+            <option value="ativo">Ativos</option>
+            <option value="inativo">Inativos</option>
+            <option value="trancado">Trancados</option>
+            <option value="visitante">Visitantes</option>
           </select>
         </div>
 
@@ -234,94 +192,81 @@ export default function Alunos() {
               </thead>
 
               <tbody>
-                {alunosFiltrados.map(
-                  (aluno) => (
-                    <tr key={aluno.id}>
-                      <td>
-                        <div className="student-name">
-                          <strong>
-                            {aluno.nome}
-                          </strong>
-
-                          <span>
-                            {aluno.cpf ||
-                              "CPF não informado"}
-                          </span>
-                        </div>
-                      </td>
-
-                      <td>
-                        {aluno.telefone || "-"}
-                      </td>
-
-                      <td>{aluno.faixa}</td>
-
-                      <td>{aluno.grau}</td>
-
-                      <td>
-                        <span
-                          className={`status-badge status-${aluno.status}`}
+                {alunosFiltrados.map((aluno) => (
+                  <tr key={aluno.id}>
+                    <td>
+                      <div className="student-name">
+                        <button
+                          className="student-name-link"
+                          onClick={() =>
+                            navigate(`/alunos/${aluno.id}`)
+                          }
                         >
-                          {aluno.status}
+                          {aluno.nome}
+                        </button>
+
+                        <span>
+                          {aluno.cpf ||
+                            "CPF não informado"}
                         </span>
-                      </td>
+                      </div>
+                    </td>
 
-                      <td>
-                        {aluno.data_matricula
-                          ? new Date(
-                              `${aluno.data_matricula}T12:00:00`
-                            ).toLocaleDateString(
-                              "pt-BR"
+                    <td>{aluno.telefone || "-"}</td>
+                    <td>{aluno.faixa}</td>
+                    <td>{aluno.grau}</td>
+
+                    <td>
+                      <span
+                        className={`status-badge status-${aluno.status}`}
+                      >
+                        {aluno.status}
+                      </span>
+                    </td>
+
+                    <td>
+                      {aluno.data_matricula
+                        ? new Date(
+                            `${aluno.data_matricula}T12:00:00`
+                          ).toLocaleDateString("pt-BR")
+                        : "-"}
+                    </td>
+
+                    <td>
+                      <div className="table-actions">
+                        <button
+                          className="icon-button"
+                          title="Editar"
+                          onClick={() =>
+                            navigate(
+                              `/alunos/${aluno.id}/editar`
                             )
-                          : "-"}
-                      </td>
+                          }
+                        >
+                          <Pencil size={17} />
+                        </button>
 
-                      <td>
-                        <div className="table-actions">
-                          <button
-                            className="icon-button"
-                            title="Editar"
-                            onClick={() =>
-                              navigate(
-                                `/alunos/${aluno.id}/editar`
-                              )
-                            }
-                          >
-                            <Pencil
-                              size={17}
-                            />
-                          </button>
-
-                          <button
-                            className="icon-button"
-                            title={
-                              aluno.status ===
-                              "ativo"
-                                ? "Inativar"
-                                : "Ativar"
-                            }
-                            onClick={() =>
-                              alterarStatus(
-                                aluno
-                              )
-                            }
-                          >
-                            {aluno.status ===
-                            "ativo" ? (
-                              <UserX
-                                size={17}
-                              />
-                            ) : (
-                              <UserCheck
-                                size={17}
-                              />
-                            )}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                )}
+                        <button
+                          className="icon-button"
+                          title={
+                            aluno.status === "ativo"
+                              ? "Inativar"
+                              : "Ativar"
+                          }
+                          onClick={() =>
+                            alterarStatus(aluno)
+                          }
+                        >
+                          {aluno.status === "ativo" ? (
+                            <UserX size={17} />
+                          ) : (
+                            <UserCheck size={17} />
+                          )}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
