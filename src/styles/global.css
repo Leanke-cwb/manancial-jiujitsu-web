@@ -1506,3 +1506,295 @@ input {
     width: 100%;
   }
 }
+/* ============================================================
+   FINANCEIRO - TELA PRINCIPAL
+============================================================ */
+
+.finance-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.finance-summary-card {
+  background: white;
+  border: 1px solid #e5eaf0;
+  border-radius: 13px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.finance-summary-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.finance-summary-card span {
+  color: #64748b;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.finance-summary-card strong {
+  color: #0f172a;
+  font-size: 21px;
+}
+
+/* ============================================================
+   CARDS DOS MÓDULOS
+============================================================ */
+
+.finance-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.finance-module-card {
+  min-height: 180px;
+  width: 100%;
+  background: white;
+  border: 1px solid #e5eaf0;
+  border-radius: 13px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  text-align: left;
+  color: #334155;
+  font-family: inherit;
+  transition: 0.2s ease;
+}
+
+button.finance-module-card {
+  cursor: pointer;
+}
+
+button.finance-module-card:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.finance-module-card > div > svg {
+  color: #475569;
+  margin-bottom: 18px;
+}
+
+.finance-module-card h2 {
+  color: #0f172a;
+  font-size: 18px;
+  margin: 0 0 7px 0;
+}
+
+.finance-module-card p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 13px;
+  max-width: 420px;
+  margin: 0;
+}
+
+.finance-module-card > svg {
+  flex-shrink: 0;
+  color: #64748b;
+}
+
+/* ============================================================
+   PLANOS
+============================================================ */
+
+.plan-name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.plan-name strong {
+  color: #0f172a;
+}
+
+.plan-name span {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* ============================================================
+   MATRÍCULA / PLANO DO ALUNO
+============================================================ */
+
+.current-enrollment-card {
+  background: white;
+  border: 1px solid #e5eaf0;
+  border-radius: 13px;
+  padding: 19px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.current-enrollment-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-enrollment-card > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.current-enrollment-card span {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.current-enrollment-card strong {
+  color: #0f172a;
+  font-size: 17px;
+}
+
+.current-enrollment-card small {
+  color: #64748b;
+}
+
+.selected-plan-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: #f8fafc;
+  border-radius: 9px;
+  padding: 15px;
+}
+
+.selected-plan-info strong {
+  width: 100%;
+  color: #0f172a;
+}
+
+.selected-plan-info span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* ============================================================
+   FINANCEIRO NO PERFIL DO ALUNO
+============================================================ */
+
+.profile-finance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  border-bottom: 1px solid #eef2f6;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+}
+
+.student-plan-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  padding: 18px;
+  background: #f8fafc;
+  border-radius: 11px;
+  margin-bottom: 25px;
+}
+
+.student-plan-details > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.student-plan-details span {
+  color: #94a3b8;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.student-plan-details strong {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.no-plan-card {
+  padding: 22px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 11px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.no-plan-card > div {
+  flex: 1;
+}
+
+.no-plan-card strong {
+  color: #0f172a;
+}
+
+.no-plan-card p {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 1100px) {
+  .finance-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .student-plan-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .finance-modules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-finance-header {
+    flex-direction: column;
+  }
+
+  .student-plan-details {
+    grid-template-columns: 1fr;
+  }
+
+  .no-plan-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .finance-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -13,6 +13,17 @@ import Alunos from "./pages/Alunos";
 import CadastrarAluno from "./pages/CadastrarAluno";
 import EditarAluno from "./pages/EditarAluno";
 import PerfilAluno from "./pages/PerfilAluno";
+import MatricularAluno from "./pages/MatricularAluno";
+
+import Financeiro from "./pages/Financeiro";
+import Planos from "./pages/Planos";
+import NovoPlano from "./pages/NovoPlano";
+import EditarPlano from "./pages/EditarPlano";
+import Mensalidades from "./pages/Mensalidades";
+import RegistrarPagamento from "./pages/RegistrarPagamento";
+import Pagamentos from "./pages/Pagamentos";
+import Inadimplentes from "./pages/Inadimplentes";
+import ReciboPagamento from "./pages/ReciboPagamento";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
@@ -25,8 +36,7 @@ function PaginaTemporaria({ titulo }) {
           <h1>{titulo}</h1>
 
           <p>
-            Este módulo será desenvolvido nas
-            próximas etapas.
+            Este módulo será desenvolvido nas próximas etapas.
           </p>
         </div>
       </header>
@@ -41,10 +51,7 @@ function PaginaTemporaria({ titulo }) {
 export default function App() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<Login />}
-      />
+      <Route path="/" element={<Login />} />
 
       <Route
         element={
@@ -74,8 +81,58 @@ export default function App() {
         />
 
         <Route
+          path="/alunos/:id/matricular"
+          element={<MatricularAluno />}
+        />
+
+        <Route
           path="/alunos/:id"
           element={<PerfilAluno />}
+        />
+
+        <Route
+          path="/financeiro"
+          element={<Financeiro />}
+        />
+
+        <Route
+          path="/financeiro/planos"
+          element={<Planos />}
+        />
+
+        <Route
+          path="/financeiro/planos/novo"
+          element={<NovoPlano />}
+        />
+
+        <Route
+          path="/financeiro/planos/:id/editar"
+          element={<EditarPlano />}
+        />
+
+        <Route
+          path="/financeiro/mensalidades"
+          element={<Mensalidades />}
+        />
+
+        <Route
+          path="/financeiro/mensalidades/:id/pagar"
+          element={<RegistrarPagamento />}
+        />
+
+        <Route
+          path="/financeiro/pagamentos"
+          element={<Pagamentos />}
+        />
+
+        <Route
+          path="/financeiro/pagamentos/:id/recibo"
+          element={<ReciboPagamento />}
+        />
+
+        <Route
+          path="/financeiro/inadimplentes"
+          element={<Inadimplentes />}
         />
 
         <Route
@@ -107,13 +164,6 @@ export default function App() {
         />
 
         <Route
-          path="/financeiro"
-          element={
-            <PaginaTemporaria titulo="Financeiro" />
-          }
-        />
-
-        <Route
           path="/relatorios"
           element={
             <PaginaTemporaria titulo="Relatórios" />
@@ -130,12 +180,7 @@ export default function App() {
 
       <Route
         path="*"
-        element={
-          <Navigate
-            to="/"
-            replace
-          />
-        }
+        element={<Navigate to="/" replace />}
       />
     </Routes>
   );

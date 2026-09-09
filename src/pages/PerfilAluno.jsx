@@ -609,8 +609,27 @@ export default function PerfilAluno() {
                   matricula.valor_mensalidade ??
                     matricula.planos?.valor
                 )}
+                {" • "}
+                Vencimento dia{" "}
+                {matricula.dia_vencimento}
               </small>
             )}
+
+            <button
+              type="button"
+              className="btn-primary"
+              style={{
+                marginTop: "14px",
+                alignSelf: "flex-start",
+              }}
+              onClick={() =>
+                navigate(`/alunos/${id}/matricular`)
+              }
+            >
+              {matricula
+                ? "Alterar plano"
+                : "Vincular plano"}
+            </button>
           </div>
 
           {mensalidades.length === 0 ? (

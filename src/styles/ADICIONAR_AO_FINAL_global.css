@@ -1,0 +1,275 @@
+/* ============================================================
+   MANANCIAL JIU JITSU
+   MENSALIDADES + PAGAMENTOS + INADIMPLENTES + RECIBO
+============================================================ */
+
+.monthly-toolbar {
+  display: grid;
+  grid-template-columns: 180px minmax(250px, 1fr) 170px;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+.monthly-reference input {
+  width: 100%;
+}
+
+.btn-table-primary {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 11px;
+  border: none;
+  border-radius: 7px;
+  background: #0f172a;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.btn-table-primary:hover {
+  background: #1e293b;
+}
+
+.finance-atrasado {
+  color: #be123c;
+  background: #fff1f2;
+}
+
+.late-days {
+  color: #be123c;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.payment-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(280px, 0.75fr)
+    minmax(420px, 1.25fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.payment-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.payment-total-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 18px;
+  margin-top: 22px;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.payment-total-box span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.payment-total-box strong {
+  color: #0f172a;
+  font-size: 24px;
+}
+
+/* RECIBO */
+
+.receipt-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.receipt-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.receipt-actions .back-button {
+  margin-bottom: 0;
+}
+
+.receipt-card {
+  background: white;
+  border: 1px solid #e5eaf0;
+  border-radius: 14px;
+  padding: 42px;
+}
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #0f172a;
+}
+
+.receipt-header h1 {
+  color: #0f172a;
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+
+.receipt-header span {
+  display: block;
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 10px;
+  letter-spacing: 7px;
+}
+
+.receipt-header > strong {
+  color: #0f172a;
+  font-size: 19px;
+  letter-spacing: 2px;
+}
+
+.receipt-number {
+  margin-top: 18px;
+  color: #94a3b8;
+  font-size: 10px;
+  word-break: break-all;
+}
+
+.receipt-text {
+  margin: 35px 0;
+  color: #334155;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.receipt-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.receipt-details > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.receipt-details span,
+.receipt-observation span {
+  color: #94a3b8;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.receipt-details strong {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.receipt-observation {
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid #e5eaf0;
+  border-radius: 10px;
+}
+
+.receipt-observation p {
+  margin-top: 8px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.receipt-footer {
+  padding-top: 70px;
+}
+
+.receipt-signature {
+  width: 280px;
+  margin-left: auto;
+  text-align: center;
+}
+
+.receipt-signature div {
+  border-top: 1px solid #334155;
+  margin-bottom: 8px;
+}
+
+.receipt-signature span {
+  color: #475569;
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .monthly-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .receipt-card {
+    padding: 24px;
+  }
+
+  .receipt-header {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .receipt-details {
+    grid-template-columns: 1fr;
+  }
+
+  .receipt-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .receipt-actions .btn-primary {
+    width: 100%;
+  }
+
+  .receipt-signature {
+    width: 100%;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  .sidebar,
+  .no-print {
+    display: none !important;
+  }
+
+  .main-area {
+    margin-left: 0 !important;
+  }
+
+  .receipt-page {
+    max-width: none;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .receipt-card {
+    border: none;
+    box-shadow: none;
+    padding: 20mm;
+  }
+}
