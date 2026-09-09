@@ -15,6 +15,17 @@ import EditarAluno from "./pages/EditarAluno";
 import PerfilAluno from "./pages/PerfilAluno";
 import MatricularAluno from "./pages/MatricularAluno";
 
+import Professores from "./pages/Professores";
+import CadastrarProfessor from "./pages/CadastrarProfessor";
+import EditarProfessor from "./pages/EditarProfessor";
+
+import Turmas from "./pages/Turmas";
+import CadastrarTurma from "./pages/CadastrarTurma";
+import EditarTurma from "./pages/EditarTurma";
+import TurmaAlunos from "./pages/TurmaAlunos";
+
+import Presencas from "./pages/Presencas";
+
 import Financeiro from "./pages/Financeiro";
 import Planos from "./pages/Planos";
 import NovoPlano from "./pages/NovoPlano";
@@ -60,100 +71,72 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+        <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route
-          path="/alunos"
-          element={<Alunos />}
-        />
-
-        <Route
-          path="/alunos/novo"
-          element={<CadastrarAluno />}
-        />
-
+        <Route path="/alunos" element={<Alunos />} />
+        <Route path="/alunos/novo" element={<CadastrarAluno />} />
         <Route
           path="/alunos/:id/editar"
           element={<EditarAluno />}
         />
-
         <Route
           path="/alunos/:id/matricular"
           element={<MatricularAluno />}
         />
+        <Route path="/alunos/:id" element={<PerfilAluno />} />
 
+        <Route path="/professores" element={<Professores />} />
         <Route
-          path="/alunos/:id"
-          element={<PerfilAluno />}
+          path="/professores/novo"
+          element={<CadastrarProfessor />}
+        />
+        <Route
+          path="/professores/:id/editar"
+          element={<EditarProfessor />}
         />
 
+        <Route path="/turmas" element={<Turmas />} />
+        <Route path="/turmas/nova" element={<CadastrarTurma />} />
         <Route
-          path="/financeiro"
-          element={<Financeiro />}
+          path="/turmas/:id/editar"
+          element={<EditarTurma />}
+        />
+        <Route
+          path="/turmas/:id/alunos"
+          element={<TurmaAlunos />}
         />
 
-        <Route
-          path="/financeiro/planos"
-          element={<Planos />}
-        />
+        <Route path="/presencas" element={<Presencas />} />
 
+        <Route path="/financeiro" element={<Financeiro />} />
+        <Route path="/financeiro/planos" element={<Planos />} />
         <Route
           path="/financeiro/planos/novo"
           element={<NovoPlano />}
         />
-
         <Route
           path="/financeiro/planos/:id/editar"
           element={<EditarPlano />}
         />
-
         <Route
           path="/financeiro/mensalidades"
           element={<Mensalidades />}
         />
-
         <Route
           path="/financeiro/mensalidades/:id/pagar"
           element={<RegistrarPagamento />}
         />
-
         <Route
           path="/financeiro/pagamentos"
           element={<Pagamentos />}
         />
-
         <Route
           path="/financeiro/pagamentos/:id/recibo"
           element={<ReciboPagamento />}
         />
-
         <Route
           path="/financeiro/inadimplentes"
           element={<Inadimplentes />}
-        />
-
-        <Route
-          path="/professores"
-          element={
-            <PaginaTemporaria titulo="Professores" />
-          }
-        />
-
-        <Route
-          path="/turmas"
-          element={
-            <PaginaTemporaria titulo="Turmas" />
-          }
-        />
-
-        <Route
-          path="/presencas"
-          element={
-            <PaginaTemporaria titulo="Presenças" />
-          }
         />
 
         <Route
