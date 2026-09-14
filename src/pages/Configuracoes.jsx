@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  Building2,
   Users,
   ShieldCheck,
   ArrowRight,
@@ -14,8 +15,10 @@ export default function Configuracoes() {
       <header className="page-header">
         <div>
           <h1>Configurações</h1>
+
           <p>
-            Gerencie usuários e permissões do sistema.
+            Gerencie os dados institucionais,
+            usuários e permissões do sistema.
           </p>
         </div>
       </header>
@@ -24,7 +27,35 @@ export default function Configuracoes() {
         <button
           className="settings-card"
           onClick={() =>
-            navigate("/configuracoes/usuarios")
+            navigate(
+              "/configuracoes/academia"
+            )
+          }
+        >
+          <div>
+            <div className="settings-card-icon">
+              <Building2 size={22} />
+            </div>
+
+            <h2>
+              Dados da academia
+            </h2>
+
+            <p>
+              Nome, documento, contato, endereço,
+              logo, PIX e dados para recibos.
+            </p>
+          </div>
+
+          <ArrowRight size={20} />
+        </button>
+
+        <button
+          className="settings-card"
+          onClick={() =>
+            navigate(
+              "/configuracoes/usuarios"
+            )
           }
         >
           <div>
@@ -49,7 +80,9 @@ export default function Configuracoes() {
               <ShieldCheck size={22} />
             </div>
 
-            <h2>Perfis de acesso</h2>
+            <h2>
+              Perfis de acesso
+            </h2>
 
             <p>
               Administrador, professor, instrutor,

@@ -57,6 +57,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import RoleRoute from "./components/RoleRoute";
 import Layout from "./components/Layout";
 
+import ConfiguracoesAcademia from "./pages/ConfiguracoesAcademia";
+
 const ADMIN = ["admin"];
 
 const ACADEMICO = [
@@ -475,7 +477,15 @@ export default function App() {
           }
         />
       </Route>
-
+  
+        <Route
+           path="/configuracoes/academia"
+           element={
+        <ComPerfil allowed={ADMIN}>
+      <ConfiguracoesAcademia />
+    </ComPerfil>
+  }
+/>
       <Route
         path="*"
         element={
@@ -486,5 +496,6 @@ export default function App() {
         }
       />
     </Routes>
+    
   );
 }

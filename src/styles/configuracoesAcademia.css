@@ -1,0 +1,82 @@
+/* ============================================================
+   CONFIGURAÇÕES DA ACADEMIA
+============================================================ */
+
+.academy-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.academy-logo-preview {
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
+  border: 1px solid #e5eaf0;
+  border-radius: 16px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #64748b;
+}
+
+.academy-logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+}
+
+.academy-logo-info {
+  flex: 1;
+}
+
+.academy-logo-info h2 {
+  margin: 0 0 6px;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.academy-logo-info p {
+  margin: 0 0 16px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.academy-logo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.academy-file-button {
+  cursor: pointer;
+}
+
+.academy-file-button input {
+  display: none;
+}
+
+@media (max-width: 650px) {
+  .academy-logo-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .academy-logo-preview {
+    width: 125px;
+    height: 125px;
+  }
+
+  .academy-logo-actions {
+    width: 100%;
+  }
+
+  .academy-logo-actions .btn-secondary,
+  .academy-file-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
