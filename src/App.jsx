@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Login from "./pages/Login";
+import AtivarConta from "./pages/AtivarConta";
 import Dashboard from "./pages/Dashboard";
 
 import Alunos from "./pages/Alunos";
@@ -45,32 +46,82 @@ import RelatorioFrequencia from "./pages/RelatorioFrequencia";
 import RelatorioTurmas from "./pages/RelatorioTurmas";
 import RelatorioGraduacoes from "./pages/RelatorioGraduacoes";
 
+import Configuracoes from "./pages/Configuracoes";
+import Usuarios from "./pages/Usuarios";
+import NovoUsuario from "./pages/NovoUsuario";
+import EditarUsuario from "./pages/EditarUsuario";
+
+import AcessoNegado from "./pages/AcessoNegado";
+
 import ProtectedRoute from "./components/ProtectedRoute";
+import RoleRoute from "./components/RoleRoute";
 import Layout from "./components/Layout";
 
-function PaginaTemporaria({ titulo }) {
-  return (
-    <div className="page-content">
-      <header className="page-header">
-        <div>
-          <h1>{titulo}</h1>
-          <p>
-            Este módulo será desenvolvido nas próximas etapas.
-          </p>
-        </div>
-      </header>
+const ADMIN = ["admin"];
 
-      <section className="content-card">
-        Módulo {titulo} em desenvolvimento.
-      </section>
-    </div>
+const ACADEMICO = [
+  "admin",
+  "professor",
+  "instrutor",
+  "recepcao",
+];
+
+const EDITAR_ALUNO = [
+  "admin",
+  "recepcao",
+];
+
+const TURMAS = [
+  "admin",
+  "professor",
+];
+
+const PRESENCAS = [
+  "admin",
+  "professor",
+  "instrutor",
+];
+
+const GRADUACOES = [
+  "admin",
+  "professor",
+];
+
+const FINANCEIRO = [
+  "admin",
+  "recepcao",
+];
+
+const RELATORIOS = [
+  "admin",
+  "professor",
+  "instrutor",
+  "recepcao",
+];
+
+function ComPerfil({
+  allowed,
+  children,
+}) {
+  return (
+    <RoleRoute allowed={allowed}>
+      {children}
+    </RoleRoute>
   );
 }
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route
+        path="/"
+        element={<Login />}
+      />
+
+      <Route
+        path="/ativar-conta"
+        element={<AtivarConta />}
+      />
 
       <Route
         element={
@@ -85,161 +136,354 @@ export default function App() {
         />
 
         <Route
+          path="/acesso-negado"
+          element={<AcessoNegado />}
+        />
+
+        <Route
           path="/alunos"
-          element={<Alunos />}
+          element={
+            <ComPerfil allowed={ACADEMICO}>
+              <Alunos />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/alunos/novo"
-          element={<CadastrarAluno />}
+          element={
+            <ComPerfil
+              allowed={EDITAR_ALUNO}
+            >
+              <CadastrarAluno />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/alunos/:id/editar"
-          element={<EditarAluno />}
+          element={
+            <ComPerfil
+              allowed={EDITAR_ALUNO}
+            >
+              <EditarAluno />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/alunos/:id/matricular"
-          element={<MatricularAluno />}
+          element={
+            <ComPerfil
+              allowed={EDITAR_ALUNO}
+            >
+              <MatricularAluno />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/alunos/:id"
-          element={<PerfilAluno />}
+          element={
+            <ComPerfil allowed={ACADEMICO}>
+              <PerfilAluno />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/professores"
-          element={<Professores />}
+          element={
+            <ComPerfil allowed={ADMIN}>
+              <Professores />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/professores/novo"
-          element={<CadastrarProfessor />}
+          element={
+            <ComPerfil allowed={ADMIN}>
+              <CadastrarProfessor />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/professores/:id/editar"
-          element={<EditarProfessor />}
+          element={
+            <ComPerfil allowed={ADMIN}>
+              <EditarProfessor />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/turmas"
-          element={<Turmas />}
+          element={
+            <ComPerfil allowed={TURMAS}>
+              <Turmas />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/turmas/nova"
-          element={<CadastrarTurma />}
+          element={
+            <ComPerfil allowed={TURMAS}>
+              <CadastrarTurma />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/turmas/:id/editar"
-          element={<EditarTurma />}
+          element={
+            <ComPerfil allowed={TURMAS}>
+              <EditarTurma />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/turmas/:id/alunos"
-          element={<TurmaAlunos />}
+          element={
+            <ComPerfil allowed={TURMAS}>
+              <TurmaAlunos />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/presencas"
-          element={<Presencas />}
+          element={
+            <ComPerfil allowed={PRESENCAS}>
+              <Presencas />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/graduacoes"
-          element={<Graduacoes />}
+          element={
+            <ComPerfil
+              allowed={GRADUACOES}
+            >
+              <Graduacoes />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/graduacoes/nova"
-          element={<NovaGraduacao />}
+          element={
+            <ComPerfil
+              allowed={GRADUACOES}
+            >
+              <NovaGraduacao />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro"
-          element={<Financeiro />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <Financeiro />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/planos"
-          element={<Planos />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <Planos />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/planos/novo"
-          element={<NovoPlano />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <NovoPlano />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/planos/:id/editar"
-          element={<EditarPlano />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <EditarPlano />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/mensalidades"
-          element={<Mensalidades />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <Mensalidades />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/mensalidades/:id/pagar"
-          element={<RegistrarPagamento />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <RegistrarPagamento />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/pagamentos"
-          element={<Pagamentos />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <Pagamentos />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/pagamentos/:id/recibo"
-          element={<ReciboPagamento />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <ReciboPagamento />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/financeiro/inadimplentes"
-          element={<Inadimplentes />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <Inadimplentes />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/relatorios"
-          element={<Relatorios />}
+          element={
+            <ComPerfil
+              allowed={RELATORIOS}
+            >
+              <Relatorios />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/relatorios/financeiro"
-          element={<RelatorioFinanceiro />}
+          element={
+            <ComPerfil
+              allowed={FINANCEIRO}
+            >
+              <RelatorioFinanceiro />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/relatorios/frequencia"
-          element={<RelatorioFrequencia />}
+          element={
+            <ComPerfil
+              allowed={PRESENCAS}
+            >
+              <RelatorioFrequencia />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/relatorios/turmas"
-          element={<RelatorioTurmas />}
+          element={
+            <ComPerfil
+              allowed={PRESENCAS}
+            >
+              <RelatorioTurmas />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/relatorios/graduacoes"
-          element={<RelatorioGraduacoes />}
+          element={
+            <ComPerfil
+              allowed={GRADUACOES}
+            >
+              <RelatorioGraduacoes />
+            </ComPerfil>
+          }
         />
 
         <Route
           path="/configuracoes"
           element={
-            <PaginaTemporaria titulo="Configurações" />
+            <ComPerfil allowed={ADMIN}>
+              <Configuracoes />
+            </ComPerfil>
+          }
+        />
+
+        <Route
+          path="/configuracoes/usuarios"
+          element={
+            <ComPerfil allowed={ADMIN}>
+              <Usuarios />
+            </ComPerfil>
+          }
+        />
+
+        <Route
+          path="/configuracoes/usuarios/novo"
+          element={
+            <ComPerfil allowed={ADMIN}>
+              <NovoUsuario />
+            </ComPerfil>
+          }
+        />
+
+        <Route
+          path="/configuracoes/usuarios/:id/editar"
+          element={
+            <ComPerfil allowed={ADMIN}>
+              <EditarUsuario />
+            </ComPerfil>
           }
         />
       </Route>
 
       <Route
         path="*"
-        element={<Navigate to="/" replace />}
+        element={
+          <Navigate
+            to="/"
+            replace
+          />
+        }
       />
     </Routes>
   );
