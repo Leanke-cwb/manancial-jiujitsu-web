@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LockKeyhole, Mail } from "lucide-react";
 import { supabase } from "../services/supabaseClient";
+import AcademyBrand from "../components/AcademyBrand";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -102,22 +103,14 @@ export default function Login() {
   return (
     <div className="login-page">
       <section className="login-brand-area">
-        <div className="brand-content">
-          <span className="brand-small">
-            ESCOLA DE
-          </span>
 
-          <h1>MANANCIAL</h1>
-
-          <h2>JIU JITSU</h2>
-
-          <div className="brand-line" />
+        <AcademyBrand variant="login" />
 
           <p>
             Gestão, disciplina e evolução dentro e
             fora do tatame.
           </p>
-        </div>
+          
       </section>
 
       <section className="login-form-area">
