@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-
 import { supabase } from "../services/supabaseClient";
 import { obterUrlLogoAcademia } from "../services/configuracoesAcademia";
-
 import "../styles/academyBrand.css";
 
 export default function AcademyBrand({
@@ -22,9 +20,7 @@ export default function AcademyBrand({
 
   const carregarMarca = async () => {
     try {
-      const { data, error } = await supabase.rpc(
-        "obter_marca_academia"
-      );
+      const { data, error } = await supabase.rpc("obter_marca_academia");
 
       if (error) {
         console.error("Erro ao carregar marca:", error);
@@ -35,8 +31,7 @@ export default function AcademyBrand({
 
       if (dados) {
         setMarca({
-          nome_academia:
-            dados.nome_academia || "Manancial Jiu Jitsu",
+          nome_academia: dados.nome_academia || "Manancial Jiu Jitsu",
           logo_path: dados.logo_path || null,
         });
       }
@@ -68,10 +63,7 @@ export default function AcademyBrand({
 
       <div className="academy-brand-text">
         <strong>{marca.nome_academia}</strong>
-
-        {showSubtitle && (
-          <span>Sistema de Gestão</span>
-        )}
+        {showSubtitle && <span>Sistema de Gestão</span>}
       </div>
     </div>
   );

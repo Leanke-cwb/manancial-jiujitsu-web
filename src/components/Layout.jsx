@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   NavLink,
   Outlet,
@@ -20,6 +21,7 @@ import {
 
 import { supabase } from "../services/supabaseClient";
 import useUsuarioAtual from "../hooks/useUsuarioAtual";
+import AcademyBrand from "./AcademyBrand";
 
 const MENU = [
   {
@@ -117,6 +119,7 @@ export default function Layout() {
 
   const sair = async () => {
     await supabase.auth.signOut();
+
     navigate("/");
   };
 
@@ -128,8 +131,7 @@ export default function Layout() {
     );
   }
 
-  const perfil =
-    usuario?.perfil || "";
+  const perfil = usuario?.perfil || "";
 
   const itens = MENU.filter(
     (item) =>
@@ -138,15 +140,19 @@ export default function Layout() {
 
   return (
     <div className="app-layout">
+
       <aside className="sidebar">
+
         <div>
-          <div className="sidebar-logo">
-            <strong>MANANCIAL</strong>
-            <span>JIU JITSU</span>
+
+          <div className="sidebar-header">
+            <AcademyBrand variant="sidebar" />
           </div>
 
           <nav className="sidebar-nav">
+
             {itens.map((item) => {
+
               const Icon = item.icon;
 
               return (
@@ -162,17 +168,24 @@ export default function Layout() {
                   }
                 >
                   <Icon size={19} />
+
                   <span>
                     {item.label}
                   </span>
+
                 </NavLink>
               );
+
             })}
+
           </nav>
+
         </div>
 
         <div className="sidebar-user-area">
+
           <div className="sidebar-user-info">
+
             <strong>
               {usuario?.nome || "Usuário"}
             </strong>
@@ -180,6 +193,7 @@ export default function Layout() {
             <span>
               {perfil || "-"}
             </span>
+
           </div>
 
           <button
@@ -188,14 +202,20 @@ export default function Layout() {
           >
             <LogOut size={19} />
 
-            <span>Sair</span>
+            <span>
+              Sair
+            </span>
+
           </button>
+
         </div>
+
       </aside>
 
       <main className="main-area">
         <Outlet />
       </main>
+
     </div>
   );
 }

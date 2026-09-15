@@ -13,6 +13,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .academy-brand-logo {
@@ -20,6 +23,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  background: transparent;
 }
 
 .academy-brand-fallback {
@@ -47,7 +51,9 @@
   color: inherit;
 }
 
-/* LOGIN */
+/* ============================================================
+   LOGIN
+============================================================ */
 
 .academy-brand-login {
   width: 100%;
@@ -58,67 +64,136 @@
 }
 
 .academy-brand-login .academy-brand-logo-box {
-  width: 132px;
-  height: 132px;
-  margin-bottom: 14px;
+  width: 280px;
+  height: 280px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.academy-brand-login .academy-brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  background: transparent;
 }
 
 .academy-brand-login .academy-brand-fallback {
-  border-radius: 24px;
+  border-radius: 50%;
   font-size: 28px;
 }
 
 .academy-brand-login .academy-brand-text strong {
-  color: #111827;
-  font-size: 24px;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 700;
   line-height: 1.2;
 }
 
 .academy-brand-login .academy-brand-text span {
-  margin-top: 5px;
-  color: #64748b;
-  font-size: 12px;
+  margin-top: 7px;
+  color: #94a3b8;
+  font-size: 14px;
 }
 
-/* SIDEBAR */
+.login-brand-area p {
+  color: #cbd5e1 !important;
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 1;
+}
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
 
 .academy-brand-sidebar {
   width: 100%;
-  gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
 }
 
 .academy-brand-sidebar .academy-brand-logo-box {
-  width: 48px;
-  height: 48px;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.academy-brand-sidebar .academy-brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  background: transparent;
 }
 
 .academy-brand-sidebar .academy-brand-fallback {
-  border-radius: 10px;
-  font-size: 12px;
+  border-radius: 50%;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .academy-brand-sidebar .academy-brand-text {
+  min-width: 0;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 .academy-brand-sidebar .academy-brand-text strong {
+  color: #ffffff;
   font-size: 15px;
-  line-height: 1.2;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: normal;
 }
 
 .academy-brand-sidebar .academy-brand-text span {
-  margin-top: 3px;
-  opacity: 0.7;
+  margin-top: 4px;
+  color: #cbd5e1;
+  opacity: 1;
   font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
 }
+
+.sidebar-header {
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+/* ============================================================
+   RESPONSIVO
+============================================================ */
 
 @media (max-width: 700px) {
   .academy-brand-login .academy-brand-logo-box {
-    width: 105px;
-    height: 105px;
+    width: 180px;
+    height: 180px;
   }
 
   .academy-brand-login .academy-brand-text strong {
-    font-size: 21px;
+    font-size: 24px;
+  }
+
+  .academy-brand-login .academy-brand-text span {
+    font-size: 13px;
+  }
+
+  .login-brand-area p {
+    font-size: 14px;
   }
 }
